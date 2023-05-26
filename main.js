@@ -14,7 +14,7 @@ const createWindow = () => {
     }
   })
 
-  win.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 
   // and load the index.html of the app.
   mainWindow.loadFile(__dirname+'/assets/index.html')

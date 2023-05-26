@@ -3,18 +3,163 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <link href="./styles.css" rel="stylesheet">
-    <title>Hello World!</title>
+
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <link href="./css/bootstrap.min.css.map" rel="stylesheet">
+    <link href="./css/styles.css" rel="stylesheet">
+
+    <title>SkyScanner Tracking Tool</title>
 </head>
 
 <body>
-    <h1>Hello World!</h1>
+    <!-- <h1>SkyScanner Tracking Tool</h1>
     We are using Node.js <span id="node-version"></span>,
     Chromium <span id="chrome-version"></span>,
-    and Electron <span id="electron-version"></span>.
+    and Electron <span id="electron-version"></span>. -->
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <form class="row mt-4 flight1">
+                    <div class="col-12 text-center">
+                        <h4>Flight1</h4>
+                    </div>
+                    <div class="col-12">
+                        <input class="form-control" type="date" />
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="data_increment" name="data_increment">
+                            <label class="form-check-label" for="data_increment">
+                                Date incremented
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="date_random" name="date_random">
+                            <label class="form-check-label" for="date_random">
+                                Random Date
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-12 mtb5">
+                        <input class="form-control" type="text" placeholder="From (IATA)" />
+                    </div>
+                    <div class="col-12 mtb5">
+                        <input class="form-control" type="text" placeholder="To (IATA)" />
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="search_pair" name="search_pair">
+                            <label class="form-check-label" for="search_pair">
+                                Search Pair in both directions
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-12 mtb5">
+                        <button class="btn btn-success w-100">Import an IATA list pair</button>
+                    </div>
+                    <div class="col-12 mtb5">
+                        <button class="btn btn-success w-100">Import a list of dates</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col">
+                <form class="row mt-4 flight2">
+                    <div class="col-12 text-center">
+                        <h4>Flight2</h4>
+                    </div>
+                    <div class="col-12">
+                        <input class="form-control" type="date" />
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="data_increment" name="data_increment">
+                            <label class="form-check-label" for="data_increment">
+                                Date incremented
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="date_random" name="date_random">
+                            <label class="form-check-label" for="date_random">
+                                Random Date
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-12 mtb5">
+                        <input class="form-control" type="text" placeholder="From (IATA)" />
+                    </div>
+                    <div class="col-12 mtb5">
+                        <input class="form-control" type="text" placeholder="To (IATA)" />
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="search_pair" name="search_pair">
+                            <label class="form-check-label" for="search_pair">
+                                Search Pair in both directions
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-12 mtb5">
+                        <button class="btn btn-success w-100">Import an IATA list pair</button>
+                    </div>
+                    <div class="col-12 mtb5">
+                        <button class="btn btn-success w-100">Import a list of dates</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col">
+                <form class="row mt-4 flight3">
+                    <div class="col-12 text-center">
+                        <h4>Flight3</h4>
+                    </div>
+                    <div class="col-12">
+                        <input class="form-control" type="date" />
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="data_increment" name="data_increment">
+                            <label class="form-check-label" for="data_increment">
+                                Date incremented
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="date_random" name="date_random">
+                            <label class="form-check-label" for="date_random">
+                                Random Date
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-12 mtb5">
+                        <input class="form-control" type="text" placeholder="From (IATA)" />
+                    </div>
+                    <div class="col-12 mtb5">
+                        <input class="form-control" type="text" placeholder="To (IATA)" />
+                    </div>
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="search_pair" name="search_pair">
+                            <label class="form-check-label" for="search_pair">
+                                Search Pair in both directions
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-12 mtb5">
+                        <button class="btn btn-success w-100">Import an IATA list pair</button>
+                    </div>
+                    <div class="col-12 mtb5">
+                        <button class="btn btn-success w-100">Import a list of dates</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
-    <script src="./renderer.js"></script>
+    <script src="./js/renderer.js"></script>
 </body>
 
 </html>
