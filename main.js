@@ -10,12 +10,14 @@ const createWindow = () => {
     width: 800,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, '/assets/js/preload.js')
     }
   })
 
+  win.webContents.openDevTools();
+
   // and load the index.html of the app.
-  mainWindow.loadFile('index.html')
+  mainWindow.loadFile(__dirname+'/assets/index.html')
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
