@@ -73,19 +73,8 @@ function changeIATAReverse(parent) {
 }
 
 function importIATA(parent) {
-    var url = '../IATA_List.csv';
-    var request = new XMLHttpRequest();
-    request.open("GET", url, false);
-    request.send(null);
-
-    console.log(request);
-    var csvData = new Array();
-    var jsonObject = request.responseText.split(/\r?\n|\r/);
-    for (var i = 0; i < jsonObject.length; i++) {
-        csvData.push(jsonObject[i].split(','));
-    }
-    // Retrived data from csv file content
-    console.log(csvData);
+    let IATA_list = JSON.parse($('#iata_list').text());
+    console.log(IATA_list);
 }
 
 function formatDate(objectDate) {
@@ -103,4 +92,49 @@ function formatDate(objectDate) {
 
     let date = `${year}-${month}-${day}`;
     return date
+}
+
+function start(){
+
+    let priceAlert = $('#priceAlert').val();
+    if(!priceAlert){
+        alert("Please set price alert!");
+        return;
+    }
+
+    let param = new Object();
+    let query = {};
+    query.market = "UK";
+    query.locale = "en-GB";
+    query.currency = "GBP";
+
+    query.queryLegs = [];
+
+    query.adults = $('#adultNumber').val();
+    if(query.adults == 0){
+        alert("Please set Adult number. Should be number between 1 with 8.");
+        return;
+    }
+
+    if($('#child').val() == ''){
+        alert('Please set child ages. Split comma');
+        return;
+    }
+
+    query.childrenAges = $('#child').val().split(',');
+
+    query.cabinClass = $('#cabinClass').val();
+    if(query.cabinClass == 0){
+        alert('Please select Cabin Class!');
+        return;
+    }
+
+    query.excludedAgentsIds = [];
+    query.excludedCarriersIds = [];
+    query.includedAgentsIds = [];
+    query.includedCarriersIds = [];
+    query.nearbyAirports = false;
+
+    param.query = query;
+    console.log(param);
 }

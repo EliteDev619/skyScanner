@@ -55,10 +55,18 @@
                         </div>
                     </div>
                     <div class="col-12 mtb5">
-                        <button class="btn btn-success w-100" onclick="importIATA('flight1')">Import an IATA list pair</button>
+                        <input class="btn btn-success w-100 form-control" type="button" onclick="importIATA('flight1')" value="Import an IATA list pair" />
+                        <!-- <div class="row">
+                            <div class="col-sm-6">
+                                <input type="file" />
+                            </div>
+                            <div class="col-sm-6">
+                                <input class="btn btn-success w-100 form-control" onclick="importIATA('flight1')" value="Import an IATA list pair" />
+                            </div>
+                        </div> -->
                     </div>
                     <div class="col-12 mtb5">
-                        <button class="btn btn-success w-100">Import a list of dates</button>
+                        <input type="button" class="btn btn-success w-100" onclick="importIATA('flight1')" value="Import a list of dates" />
                     </div>
                 </form>
             </div>
@@ -158,35 +166,35 @@
         <hr />
         <div class="row">
             <div class="col">
-                <input class="form-control" type="text" placeholder="Price Alert" />
+                <input class="form-control" type="number" id="priceAlert" placeholder="Price Alert" />
             </div>
             <div class="col">
-                <select class="form-control">
-                    <option selected>After end checking</option>
+                <select class="form-control" id="checkStatus">
+                    <option>After end checking</option>
                     <option value="1">Do not restart</option>
                     <option value="2">Immediatly restart</option>
                     <option value="3">Restart after X minutes</option>
                 </select>
             </div>
             <div class="col">
-                <select class="form-control">
-                    <option selected>Cabin Class</option>
-                    <option value="1">Economic</option>
-                    <option value="2">Business</option>
+                <select class="form-control" id="cabinClass">
+                    <option value="0">Cabin Class</option>
+                    <option value="CABIN_CLASS_ECONOMY">Economic</option>
+                    <option value="CABIN_CLASS_BUSINESS">Business</option>
                 </select>
             </div>
         </div>
         <div class="row mt-2 mb-2">
             <div class="col">
-                <input class="form-control" type="number" placeholder="Adult Number" />
+                <input class="form-control" type="number" id="adultNumber" placeholder="Adult Number" />
             </div>
             <div class="col">
-                <input class="form-control" type="number" placeholder="Child Number" />
+                <input class="form-control" type="text" id="child" placeholder="Child Number" />
             </div>
         </div>
         <div class="row">
             <div class="col">
-                <button class="btn btn-primary">Start</button>
+                <button class="btn btn-primary" onclick="start()">Start</button>
             </div>
         </div>
         <div class="d-none">
