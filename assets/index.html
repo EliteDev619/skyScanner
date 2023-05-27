@@ -41,21 +41,21 @@
                         </div>
                     </div>
                     <div class="col-12 mtb5">
-                        <input class="form-control" type="text" placeholder="From (IATA)" />
+                        <input class="form-control" type="text" name="from_iata" placeholder="From (IATA)" />
                     </div>
                     <div class="col-12 mtb5">
-                        <input class="form-control" type="text" placeholder="To (IATA)" />
+                        <input class="form-control" type="text" name="to_iata" placeholder="To (IATA)" />
                     </div>
                     <div class="col-12">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="search_pair" name="search_pair">
+                            <input class="form-check-input" type="checkbox" id="search_pair" onclick="changeIATAReverse('flight1')" name="search_pair">
                             <label class="form-check-label" for="search_pair">
                                 Search Pair in both directions
                             </label>
                         </div>
                     </div>
                     <div class="col-12 mtb5">
-                        <button class="btn btn-success w-100">Import an IATA list pair</button>
+                        <button class="btn btn-success w-100" onclick="importIATA('flight1')">Import an IATA list pair</button>
                     </div>
                     <div class="col-12 mtb5">
                         <button class="btn btn-success w-100">Import a list of dates</button>
@@ -188,6 +188,9 @@
             <div class="col">
                 <button class="btn btn-primary">Start</button>
             </div>
+        </div>
+        <div class="d-none">
+            <textarea id="iata_list"></textarea>
         </div>
     </div>
 
