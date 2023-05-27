@@ -7,14 +7,14 @@ const path = require('path')
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1000,
+    height: 660,
     webPreferences: {
       preload: path.join(__dirname, '/assets/js/preload.js')
     }
   })
 
-  mainWindow.webContents.openDevTools();
+//   mainWindow.webContents.openDevTools();
 
   // and load the index.html of the app.
   mainWindow.loadFile(__dirname+'/assets/index.html')
