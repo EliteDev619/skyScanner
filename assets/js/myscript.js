@@ -122,32 +122,40 @@ function formatCSV(data) {
 
 function combineIATAPairs(){
 
-    var array = CSV_DATA;
-    // var array = ["a", "b", "c", "d", "e"];
+    var array1 = CSV_DATA.flight1;
+    var array2 = CSV_DATA.flight2;
+    var array3 = CSV_DATA.flight3;
+    if(!CSV_DATA.flight3)
+    {
+        array3 = CSV_DATA.flight2;
+    }
+
+    // var array1 = ['A', 'B'];
+    // var array2 = ['M', 'N'];
+    // var array3 = ['X', 'Y'];
+
     let results = [];
 
-    // Since you only want pairs, there's no reason
-    // to iterate over the last element directly
-    for (let i = 0; i < array.length - 1; i++) {
-      // This is where you'll capture that last value
-      for (let j = i + 1; j < array.length; j++) {
-        // results.push(`${array[i]} ${array[j]}`);
-        for (let k = j + 1; k < array.length; k++) {
+    for (let i = 0; i < array1.length; i++) {
+      for (let j = 0; j < array2.length; j++) {
+        for (let k = 0; k < array3.length; k++) {
             let temp = [];
-            temp.push(array[i]);
-            temp.push(array[j]);
-            temp.push(array[k]);
+            temp.push(array1[i]);
+            temp.push(array2[j]);
+            temp.push(array3[k]);
             results.push(temp);
           }
       }
     }
-    
-    console.log(results);
+
+    IATA_PAIR = results;
 }
 
 function start() {
 
-    combineIATAPairs();
+    combineIATAPairs(); 
+    console.log(IATA_PAIR)
+    return;
     let priceAlert = $('#priceAlert').val();
     if (!priceAlert) {
         alert("Please set price alert!");
