@@ -114,19 +114,18 @@ function formatCSV(data) {
         let row = item.split(',');
         obj.from = row[0].trim();
         obj.to = row[1].split('\r')[0].trim();
-        result.push(obj);    
+        result.push(obj);
     });
 
     return result;
 }
 
-function combineIATAPairs(){
+function combineIATAPairs() {
 
     var array1 = CSV_DATA.flight1;
     var array2 = CSV_DATA.flight2;
     var array3 = CSV_DATA.flight3;
-    if(!CSV_DATA.flight3)
-    {
+    if (!CSV_DATA.flight3) {
         array3 = CSV_DATA.flight2;
     }
 
@@ -137,15 +136,15 @@ function combineIATAPairs(){
     let results = [];
 
     for (let i = 0; i < array1.length; i++) {
-      for (let j = 0; j < array2.length; j++) {
-        for (let k = 0; k < array3.length; k++) {
-            let temp = [];
-            temp.push(array1[i]);
-            temp.push(array2[j]);
-            temp.push(array3[k]);
-            results.push(temp);
-          }
-      }
+        for (let j = 0; j < array2.length; j++) {
+            for (let k = 0; k < array3.length; k++) {
+                let temp = [];
+                temp.push(array1[i]);
+                temp.push(array2[j]);
+                temp.push(array3[k]);
+                results.push(temp);
+            }
+        }
     }
 
     IATA_PAIR = results;
@@ -153,9 +152,9 @@ function combineIATAPairs(){
 
 function start() {
 
-    combineIATAPairs(); 
-    console.log(IATA_PAIR)
-    return;
+    combineIATAPairs();
+    console.log(IATA_PAIR);
+    // return;
     let priceAlert = $('#priceAlert').val();
     if (!priceAlert) {
         alert("Please set price alert!");
@@ -168,6 +167,11 @@ function start() {
     query.locale = "en-GB";
     query.currency = "GBP";
 
+    if(!CSV_DATA || !IATA_PAIR){
+        alert('Please import IATA Data.');
+        return;
+    }
+    
     query.queryLegs = [];
 
     query.adults = $('#adultNumber').val();
@@ -197,4 +201,69 @@ function start() {
 
     param.query = query;
     console.log(param);
+}
+
+function start1() {
+    let param = {
+        "query": {
+            "market": "UK",
+            "locale": "en-GB",
+            "currency": "GBP",
+            "queryLegs": [
+                {
+                    "originPlaceId": {
+                        "iata": "EDI" // The IATA code for the "Edinburgh" airport
+                    },
+                    "destinationPlaceId": {
+                        "entityId": "27544008" // The internal Skyscanner ID for the "London" city
+                    },
+                    "date": {
+                        "year": 2023,
+                        "month": 6,
+                        "day": 1
+                    }
+                }
+            ],
+            "adults": 1,
+            "childrenAges": [],
+            "cabinClass": "CABIN_CLASS_ECONOMY",
+            "excludedAgentsIds": [],
+            "excludedCarriersIds": [],
+            "includedAgentsIds": [],
+            "includedCarriersIds": [],
+            "includeSustainabilityData": true,
+            "nearbyAirports": true
+        }
+    };
+
+    // var proxy = 'https://cors-anywhere.herokuapp.com/';
+    let url = 'https://partners.api.skyscanner.net/apiservices/v3/flights/live/search/create';
+    // $.ajax({
+    //     url: "https://partners.api.skyscanner.net/apiservices/v3/flights/live/search/create",
+    //     data: JSON.stringify(param),
+    //     type: "POST",
+    //     beforeSend: function (xhr) { 
+    //         xhr.setRequestHeader('content-type', 'application/json'); 
+    //         xhr.setRequestHeader('x-api-key', 'fl687154418168043982723635787130'); 
+    //     },
+    //     success: function (data) { alert('Success!' + data); }
+    // });
+
+    $.ajax({
+        type: 'POST',
+        url: url,
+        // url: proxy + url,
+        data : JSON.stringify(param),
+        // headers: {
+        //     "My-First-Header":"first value",
+        //     "My-Second-Header":"second value"
+        // }
+        //OR
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader('content-type', 'application/json');
+            xhr.setRequestHeader('x-api-key', 'fl687154418168043982723635787130');
+        }
+    }).done(function (data) {
+        console.log(data);
+    });
 }

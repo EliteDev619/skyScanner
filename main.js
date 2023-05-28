@@ -6,7 +6,7 @@ const createWindow = () => {
     width: 1000,
     height: 660,
     webPreferences: {
-      nodeIntegration: true,
+      // nodeIntegration: true,
       preload: path.join(__dirname, '/assets/js/preload.js'),
     }
   })
