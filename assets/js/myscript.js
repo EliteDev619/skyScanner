@@ -81,9 +81,7 @@ function importIATA(parent, el) {
     const reader = new FileReader()
     reader.onload = () => {
         let result = formatCSV(reader.result);
-        addCSVDATA(result);
-        // let rand = Math.floor((Math.random() * (result.length)) + 1);
-        // let randData = result[rand];
+        CSV_DATA[parent] = result;
         $('input[name=from_iata]', form).val(result[0].from);
         $('input[name=to_iata]', form).val(result[0].to);
     }
@@ -122,34 +120,25 @@ function formatCSV(data) {
     return result;
 }
 
-function addCSVDATA(data) {
-
-    let temp = [];
-
-    if(CSV_DATA.length != 0){
-        CSV_DATA.forEach(item => {
-            data.forEach(row => {
-                if(item.from != row.from && item.to != row.to){
-                    temp.push(row);
-                }
-            });
-        });
-        CSV_DATA.concat(temp);
-    } else {
-        CSV_DATA = data;
-    }
-}
-
 function combineIATAPairs(){
 
+    var array = CSV_DATA;
+    // var array = ["a", "b", "c", "d", "e"];
     let results = [];
 
     // Since you only want pairs, there's no reason
     // to iterate over the last element directly
-    for (let i = 0; i < CSV_DATA.length - 1; i++) {
+    for (let i = 0; i < array.length - 1; i++) {
       // This is where you'll capture that last value
-      for (let j = i + 1; j < CSV_DATA.length; j++) {
-        results.push(`${CSV_DATA[i]} ${CSV_DATA[j]}`);
+      for (let j = i + 1; j < array.length; j++) {
+        // results.push(`${array[i]} ${array[j]}`);
+        for (let k = j + 1; k < array.length; k++) {
+            let temp = [];
+            temp.push(array[i]);
+            temp.push(array[j]);
+            temp.push(array[k]);
+            results.push(temp);
+          }
       }
     }
     
