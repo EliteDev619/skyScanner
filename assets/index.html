@@ -78,11 +78,11 @@
                         <h4>Flight2</h4>
                     </div>
                     <div class="col-12">
-                        <input class="form-control" name="flight_date" type="date" />
+                        <input class="form-control" type="date" name="flight_date" onchange="changeDate('flight2')" />
                     </div>
                     <div class="col-12">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="data_increment" name="data_increment">
+                            <input class="form-check-input" type="checkbox" onclick="changeDateIncrement('flight2')" id="data_increment" name="data_increment">
                             <label class="form-check-label" for="data_increment">
                                 Date incremented
                             </label>
@@ -90,31 +90,41 @@
                     </div>
                     <div class="col-12">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="date_random" name="date_random">
+                            <input class="form-check-input" type="checkbox" onclick="changeRandomDate('flight2')" id="date_random" name="date_random">
                             <label class="form-check-label" for="date_random">
                                 Random Date
                             </label>
                         </div>
                     </div>
                     <div class="col-12 mtb5">
-                        <input class="form-control" type="text" placeholder="From (IATA)" />
+                        <input class="form-control" type="text" name="from_iata" placeholder="From (IATA)" />
                     </div>
                     <div class="col-12 mtb5">
-                        <input class="form-control" type="text" placeholder="To (IATA)" />
+                        <input class="form-control" type="text" name="to_iata" placeholder="To (IATA)" />
                     </div>
                     <div class="col-12">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="search_pair" name="search_pair">
+                            <input class="form-check-input" type="checkbox" id="search_pair" onclick="changeIATAReverse('flight2')" name="search_pair">
                             <label class="form-check-label" for="search_pair">
                                 Search Pair in both directions
                             </label>
                         </div>
                     </div>
                     <div class="col-12 mtb5">
-                        <button class="btn btn-success w-100">Import an IATA list pair</button>
+                        <label for="import_iata">Import an IATA list pair</label>
+                        <input class="btn btn-success w-100 form-control" type="file" accept=".csv, text/csv"  onchange="importIATA('flight2', this)" id="import_iata" name="import_iata"/>
+                        <!-- <div class="row">
+                            <div class="col-sm-6">
+                                <input type="file" />
+                            </div>
+                            <div class="col-sm-6">
+                                <input class="btn btn-success w-100 form-control" onclick="importIATA('flight2')" value="Import an IATA list pair" />
+                            </div>
+                        </div> -->
                     </div>
                     <div class="col-12 mtb5">
-                        <button class="btn btn-success w-100">Import a list of dates</button>
+                        <label for="import_iata">Import a list of dates</label>
+                        <input type="button" class="btn btn-success w-100" onclick="importIATA('flight2')" value="Import a list of dates" />
                     </div>
                 </form>
             </div>

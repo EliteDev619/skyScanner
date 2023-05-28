@@ -2,6 +2,9 @@ $(document).ready(function () {
 
 });
 
+var IATA_PAIR = [];
+var CSV_DATA = [];
+
 function changeDate(parent) {
     let form = $('.' + parent);
     let date = $('input[name=flight_date]', form).val();
@@ -78,10 +81,11 @@ function importIATA(parent, el) {
     const reader = new FileReader()
     reader.onload = () => {
         let result = formatCSV(reader.result);
-        let rand = Math.floor((Math.random() * (result.length)) + 1);
-        let randData = result[rand];
-        $('input[name=from_iata]', form).val(randData.from);
-        $('input[name=to_iata]', form).val(randData.to);
+        addCSVDATA(result);
+        // let rand = Math.floor((Math.random() * (result.length)) + 1);
+        // let randData = result[rand];
+        $('input[name=from_iata]', form).val(result[0].from);
+        $('input[name=to_iata]', form).val(result[0].to);
     }
     reader.readAsBinaryString(el.files[0])
 }
@@ -118,8 +122,43 @@ function formatCSV(data) {
     return result;
 }
 
+function addCSVDATA(data) {
+
+    let temp = [];
+
+    if(CSV_DATA.length != 0){
+        CSV_DATA.forEach(item => {
+            data.forEach(row => {
+                if(item.from != row.from && item.to != row.to){
+                    temp.push(row);
+                }
+            });
+        });
+        CSV_DATA.concat(temp);
+    } else {
+        CSV_DATA = data;
+    }
+}
+
+function combineIATAPairs(){
+
+    let results = [];
+
+    // Since you only want pairs, there's no reason
+    // to iterate over the last element directly
+    for (let i = 0; i < CSV_DATA.length - 1; i++) {
+      // This is where you'll capture that last value
+      for (let j = i + 1; j < CSV_DATA.length; j++) {
+        results.push(`${CSV_DATA[i]} ${CSV_DATA[j]}`);
+      }
+    }
+    
+    console.log(results);
+}
+
 function start() {
 
+    combineIATAPairs();
     let priceAlert = $('#priceAlert').val();
     if (!priceAlert) {
         alert("Please set price alert!");
