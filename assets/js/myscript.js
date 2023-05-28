@@ -150,10 +150,55 @@ function combineIATAPairs() {
     IATA_PAIR = results;
 }
 
+function getQueryLegs(dates,data){
+
+    let legs = [];
+    let leg = {
+        "originPlaceId": {
+            "iata": ""
+        },
+        "destinationPlaceId": {
+            "iata": ""
+        },
+        "date": {
+            "year": '',
+            "month": '',
+            "day": ''
+        }
+    }
+
+    for (let i = 0; i < 3; i++) {
+        let item = data[i];
+        let date = dates[i];
+        leg.originPlaceId['iata'] = item.from;
+        leg.destinationPlaceId['iata'] = item.to;
+        leg.date['year'] = date.split('-')[0];
+        leg.date['month'] = date.split('-')[1];
+        leg.date['day'] = date.split('-')[2];
+        legs.push(leg);
+    }
+
+    return legs;
+}
+
 function start() {
 
+    let flight1Date = $('input[name=flight_date]', '.flight1').val();
+    let flight2Date = $('input[name=flight_date]', '.flight2').val();
+    let flight3Date = $('input[name=flight_date]', '.flight3').val();
+
+    if(!flight1Date || !flight2Date || !flight3Date){
+        alert("Please set flight date.");
+        return;
+    }
+
+    if(!CSV_DATA.flight1 || !CSV_DATA.flight1.length || !CSV_DATA.flight2 || !CSV_DATA.flight2.length){
+        alert("Please import IATA Data.");
+        return;
+    }
+
     combineIATAPairs();
-    console.log(IATA_PAIR);
+    // console.log(IATA_PAIR);
     // return;
     let priceAlert = $('#priceAlert').val();
     if (!priceAlert) {
@@ -167,12 +212,11 @@ function start() {
     query.locale = "en-GB";
     query.currency = "GBP";
 
-    if(!CSV_DATA || !IATA_PAIR){
-        alert('Please import IATA Data.');
-        return;
-    }
-    
-    query.queryLegs = [];
+    let dates = [];
+    dates.push(flight1Date);
+    dates.push(flight2Date);
+    dates.push(flight3Date);
+    query.queryLegs = getQueryLegs(dates, IATA_PAIR[0]);
 
     query.adults = $('#adultNumber').val();
     if (query.adults == 0) {
@@ -236,7 +280,7 @@ function start1() {
         }
     };
 
-    // var proxy = 'https://cors-anywhere.herokuapp.com/';
+    var proxy = 'https://cors-anywhere.herokuapp.com/';
     let url = 'https://partners.api.skyscanner.net/apiservices/v3/flights/live/search/create';
     // $.ajax({
     //     url: "https://partners.api.skyscanner.net/apiservices/v3/flights/live/search/create",
@@ -251,8 +295,8 @@ function start1() {
 
     $.ajax({
         type: 'POST',
-        url: url,
-        // url: proxy + url,
+        // url: url,
+        url: proxy + url,
         data : JSON.stringify(param),
         // headers: {
         //     "My-First-Header":"first value",
