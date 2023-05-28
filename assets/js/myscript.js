@@ -72,9 +72,18 @@ function changeIATAReverse(parent) {
     $('input[name=to_iata]', form).val(fromIATA);
 }
 
-function importIATA(parent) {
-    let IATA_list = JSON.parse($('#iata_list').text());
-    console.log(IATA_list);
+function importIATA(parent, el) {
+
+    let form = $('.' + parent);
+    const reader = new FileReader()
+    reader.onload = () => {
+        let result = formatCSV(reader.result);
+        let rand = Math.floor((Math.random() * (result.length)) + 1);
+        let randData = result[rand];
+        $('input[name=from_iata]', form).val(randData.from);
+        $('input[name=to_iata]', form).val(randData.to);
+    }
+    reader.readAsBinaryString(el.files[0])
 }
 
 function formatDate(objectDate) {
@@ -94,10 +103,25 @@ function formatDate(objectDate) {
     return date
 }
 
-function start(){
+function formatCSV(data) {
+
+    let result = [];
+    let temp = data.split('\n');
+    temp.forEach(item => {
+        let obj = {};
+        let row = item.split(',');
+        obj.from = row[0].trim();
+        obj.to = row[1].split('\r')[0].trim();
+        result.push(obj);    
+    });
+
+    return result;
+}
+
+function start() {
 
     let priceAlert = $('#priceAlert').val();
-    if(!priceAlert){
+    if (!priceAlert) {
         alert("Please set price alert!");
         return;
     }
@@ -111,12 +135,12 @@ function start(){
     query.queryLegs = [];
 
     query.adults = $('#adultNumber').val();
-    if(query.adults == 0){
+    if (query.adults == 0) {
         alert("Please set Adult number. Should be number between 1 with 8.");
         return;
     }
 
-    if($('#child').val() == ''){
+    if ($('#child').val() == '') {
         alert('Please set child ages. Split comma');
         return;
     }
@@ -124,7 +148,7 @@ function start(){
     query.childrenAges = $('#child').val().split(',');
 
     query.cabinClass = $('#cabinClass').val();
-    if(query.cabinClass == 0){
+    if (query.cabinClass == 0) {
         alert('Please select Cabin Class!');
         return;
     }

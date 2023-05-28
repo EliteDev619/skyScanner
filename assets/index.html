@@ -55,7 +55,8 @@
                         </div>
                     </div>
                     <div class="col-12 mtb5">
-                        <input class="btn btn-success w-100 form-control" type="button" onclick="importIATA('flight1')" value="Import an IATA list pair" />
+                        <label for="import_iata">Import an IATA list pair</label>
+                        <input class="btn btn-success w-100 form-control" type="file" accept=".csv, text/csv"  onchange="importIATA('flight1', this)" id="import_iata" name="import_iata"/>
                         <!-- <div class="row">
                             <div class="col-sm-6">
                                 <input type="file" />
@@ -66,6 +67,7 @@
                         </div> -->
                     </div>
                     <div class="col-12 mtb5">
+                        <label for="import_iata">Import a list of dates</label>
                         <input type="button" class="btn btn-success w-100" onclick="importIATA('flight1')" value="Import a list of dates" />
                     </div>
                 </form>
@@ -197,7 +199,7 @@
                 <button class="btn btn-primary" onclick="start()">Start</button>
             </div>
         </div>
-        <div class="d-none">
+        <div class="">
             <textarea id="iata_list"></textarea>
         </div>
     </div>
