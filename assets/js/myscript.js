@@ -150,7 +150,7 @@ function combineIATAPairs() {
     IATA_PAIR = results;
 }
 
-function getQueryLegs(dates,data){
+function getQueryLegs(dates, data) {
 
     let legs = [];
     let leg = {
@@ -187,12 +187,12 @@ function start() {
     let flight2Date = $('input[name=flight_date]', '.flight2').val();
     let flight3Date = $('input[name=flight_date]', '.flight3').val();
 
-    if(!flight1Date || !flight2Date || !flight3Date){
+    if (!flight1Date || !flight2Date || !flight3Date) {
         alert("Please set flight date.");
         return;
     }
 
-    if(!CSV_DATA.flight1 || !CSV_DATA.flight1.length || !CSV_DATA.flight2 || !CSV_DATA.flight2.length){
+    if (!CSV_DATA.flight1 || !CSV_DATA.flight1.length || !CSV_DATA.flight2 || !CSV_DATA.flight2.length) {
         alert("Please import IATA Data.");
         return;
     }
@@ -256,15 +256,28 @@ function start1() {
             "queryLegs": [
                 {
                     "originPlaceId": {
-                        "iata": "EDI" // The IATA code for the "Edinburgh" airport
+                        "iata": "BER"
                     },
                     "destinationPlaceId": {
-                        "entityId": "27544008" // The internal Skyscanner ID for the "London" city
+                        "iata": "BCN"
                     },
                     "date": {
-                        "year": 2023,
-                        "month": 6,
-                        "day": 1
+                        "year": "2023",
+                        "month": "6",
+                        "day": "2"
+                    }
+                },
+                {
+                    "originPlaceId": {
+                        "iata": "MAD"
+                    },
+                    "destinationPlaceId": {
+                        "iata": "SKG"
+                    },
+                    "date": {
+                        "year": "2023",
+                        "month": "6",
+                        "day": "2"
                     }
                 }
             ],
@@ -275,8 +288,8 @@ function start1() {
             "excludedCarriersIds": [],
             "includedAgentsIds": [],
             "includedCarriersIds": [],
-            "includeSustainabilityData": true,
-            "nearbyAirports": true
+            "includeSustainabilityData": false,
+            "nearbyAirports": false
         }
     };
 
@@ -297,7 +310,7 @@ function start1() {
         type: 'POST',
         // url: url,
         url: proxy + url,
-        data : JSON.stringify(param),
+        data: JSON.stringify(param),
         // headers: {
         //     "My-First-Header":"first value",
         //     "My-Second-Header":"second value"
@@ -309,5 +322,59 @@ function start1() {
         }
     }).done(function (data) {
         console.log(data);
+
+        url = `https://partners.api.skyscanner.net/apiservices/v3/flights/live/search/poll/${data.sessionToken}`;
+        $.ajax({
+            type: 'POST',
+            // url: url,
+            url: proxy + url,
+            // headers: {
+            //     "My-First-Header":"first value",
+            //     "My-Second-Header":"second value"
+            // }
+            //OR
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('content-type', 'application/json');
+                xhr.setRequestHeader('x-api-key', 'fl687154418168043982723635787130');
+            }
+        }).done(function (data) {
+            console.log('==========');
+            console.log(data);
+            getCheapestValue(data);
+        });
     });
+}
+
+function getCheapestValue(data) {
+    // const bestItineraryIds = data.content.sortingOptions.cheapest.map(
+    //     (flight) => flight.itineraryId,
+    // );
+
+    // const bestItineraries = Object.keys(data.content.results.itineraries)
+    //     .filter((key) => bestItineraryIds.includes(key))
+    //     .reduce((obj, key) => {
+    //         obj[key] = data.content.results.itineraries[key];
+    //         return obj;
+    //     }, {});
+
+    // console.log(bestItineraries);
+
+    // let prices = [];
+    // for (const [key, value] of Object.entries(bestItineraries)) {
+    //     // console.log(`${key}: ${value}`);
+    //     let row = {};
+    //     row.key = key;
+    //     row.value = 0;
+    //     value.pricingOptions.forEach(element => {
+    //         row.value += parseInt(element.price.amount);
+    //     });
+    //     prices.push(row);
+    // }
+
+    // console.log(prices);
+
+    let itineraryId = data.content.sortingOptions.cheapest[0].itineraryId;
+    let price = data.content.results.itineraries[itineraryId];
+    console.log(price);
+
 }
