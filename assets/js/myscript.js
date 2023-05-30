@@ -223,9 +223,6 @@ function start() {
     //     {from : $('input[name=from_iata]', '.flight3').val(), to : $('input[name=to_iata]', '.flight3').val()},
     // ]
     // query.queryLegs = getQueryLegs(dates, temp);
-    console.log('ALL Combination =>', IATA_PAIR);
-    console.log('One Pair => ' ,IATA_PAIR[0]);
-    query.queryLegs = getQueryLegs(dates, IATA_PAIR[0]);
 
     query.adults = $('#adultNumber').val();
     if (query.adults == 0) {
@@ -254,10 +251,25 @@ function start() {
     query.nearbyAirports = false;
     query.includeSustainabilityData = false;
 
-    param.query = query;
-    console.log(param);
-
-    getFlightResult(param);
+    console.log('ALL Combination =>', IATA_PAIR);
+    
+    // let queryLegs = getQueryLegs(dates, IATA_PAIR[0]);
+    // query.queryLegs = queryLegs;
+    // param.query = query;
+    // getFlightResult(param);
+ 
+    IATA_PAIR.forEach(item => {
+        query.queryLegs = {};
+        console.log('One Pair => ' ,item);
+        let queryLegs = getQueryLegs(dates, item);
+    
+        let strPair = '['+JSON.stringify(item[0])+', '+JSON.stringify(item[1])+', '+JSON.stringify(item[2])+']';
+        // console.log(queryLegs);
+        query.queryLegs = queryLegs;
+        param.query = query;
+        // console.log(param);
+        getFlightResult(param, strPair);
+    });
 }
 
 function start1() {
@@ -322,7 +334,7 @@ function start1() {
     getFlightResult(param);
 }
 
-function getFlightResult(param){
+function getFlightResult(param, strPair){
     var proxy = 'https://cors-anywhere.herokuapp.com/';
     let url = 'https://partners.api.skyscanner.net/apiservices/v3/flights/live/search/create';
 
@@ -349,12 +361,12 @@ function getFlightResult(param){
             }
         }).done(function (data) {
             console.log(data);
-            getCheapestValue(data);
+            getCheapestValue(data, strPair);
         });
     });
 }
 
-function getCheapestValue(data) {
+function getCheapestValue(data, strPair) {
     let prices = [];
     data.content.sortingOptions.cheapest.forEach(item => {
         let itineraryId = item.itineraryId;
@@ -365,18 +377,21 @@ function getCheapestValue(data) {
     });
 
     console.log(prices);
+    $('.alerts').append('<hr>');
     $('#priceAlertDiv').html('');
+    let html = '<div id="priceAlertDiv">';
+
     let fitCount = 0;
     prices.forEach(row => {
         let amount = Math.ceil(row.data[0].price.amount / 1000);
         if(amount < PRICE_ALERT){
             fitCount++;
             // console.log(row);
-            let html = '';
+            // let html = '';
             if(row.data.length == 1){
-                html = '<div class="alert alert-success" role="alert"><span>'+amount+'GBP. There is '+row.data.length+' deal. </span>';
+                html += '<div class="alert alert-success" role="alert"><span>'+amount+'GBP. There is '+row.data.length+' deal. </span>';
             } else {
-                html = '<div class="alert alert-success" role="alert"><span>'+amount+'GBP. There are '+row.data.length+' deals. </span>';
+                html += '<div class="alert alert-success" role="alert"><span>'+amount+'GBP. There are '+row.data.length+' deals. </span>';
             }
 
             row.data.forEach(temp => {
@@ -384,10 +399,13 @@ function getCheapestValue(data) {
             });
 
             html += '</div>';
-            $('#priceAlertDiv').append(html);
+            // $('#priceAlertDiv').append(html);
         }
     });
+    html += '</div>';
+    $('.alerts').append('<div class="col m-2">Pair : '+strPair+'. All result count is <span>'+prices.length+'</span>. Fit result count is <span>'+fitCount+'</span></div>');
+    $('.alerts').append(html);
 
-    $('#res_cnt').text(prices.length);
-    $('#fit_cnt').text(fitCount);
+    // $('#res_cnt').text(prices.length);
+    // $('#fit_cnt').text(fitCount);
 }
