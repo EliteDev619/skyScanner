@@ -230,13 +230,18 @@ function start() {
         return;
     }
 
-    // if ($('#child').val() == '') {
-    //     alert('Please set child ages. Split comma');
-    //     return;
-    // }
+    if (($('#child').val()).trim() != '') {
+        // alert('Please set child ages. Split comma');
+        let childrenAgesTemp = $('#child').val().split(',');
+        let childrenAges = [];
+        childrenAgesTemp.forEach(item => {
+            childrenAges.push(item.trim());
+        });
+        query.childrenAges = childrenAges;
+    } else {
+        query.childrenAges = [];
+    }
 
-    query.childrenAges = [];
-    // query.childrenAges = $('#child').val().split(',');
 
     query.cabinClass = $('#cabinClass').val();
     if (query.cabinClass == 0) {
