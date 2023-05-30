@@ -4,7 +4,7 @@ $(document).ready(function () {
 
 var IATA_PAIR = [];
 var CSV_DATA = [];
-var PRICE_ALERT = 280;
+var PRICE_ALERT = 600;
 
 function changeDate(parent) {
     let form = $('.' + parent);
@@ -38,6 +38,8 @@ function changeDateIncrement(parent) {
     let form = $('.' + parent);
     let date = $('input[name=flight_date]', form).val();
 
+    console.log(parent);
+    console.log(form);
     if (date == '') {
         alert('Please set date at first!');
         $('input[name=data_increment]', form).prop('checked', false);;
@@ -154,7 +156,7 @@ function combineIATAPairs() {
 function getQueryLegs(dates, data) {
 
     let legs = [];
-    
+
     for (let i = 0; i < 3; i++) {
         let item = data[i];
         let date = dates[i];
@@ -209,6 +211,20 @@ function start() {
     dates.push(flight1Date);
     dates.push(flight2Date);
     dates.push(flight3Date);
+
+    // let temp = [
+    //     {from : "BER", to : "BCN"},
+    //     {from : "MAD", to : "SKG"},
+    //     {from : "SKG", to : "IST"},
+    // ]
+    // let temp = [
+    //     {from : $('input[name=from_iata]', '.flight1').val(), to : $('input[name=to_iata]', '.flight1').val()},
+    //     {from : $('input[name=from_iata]', '.flight2').val(), to : $('input[name=to_iata]', '.flight2').val()},
+    //     {from : $('input[name=from_iata]', '.flight3').val(), to : $('input[name=to_iata]', '.flight3').val()},
+    // ]
+    // query.queryLegs = getQueryLegs(dates, temp);
+    console.log('ALL Combination =>', IATA_PAIR);
+    console.log('One Pair => ' ,IATA_PAIR[0]);
     query.queryLegs = getQueryLegs(dates, IATA_PAIR[0]);
 
     query.adults = $('#adultNumber').val();
@@ -240,6 +256,8 @@ function start() {
 
     param.query = query;
     console.log(param);
+
+    getFlightResult(param);
 }
 
 function start1() {
@@ -274,7 +292,20 @@ function start1() {
                         "month": "6",
                         "day": "2"
                     }
-                }
+                },
+                {
+                    "originPlaceId": {
+                        "iata": "SKG"
+                    },
+                    "destinationPlaceId": {
+                        "iata": "IST"
+                    },
+                    "date": {
+                        "year": "2023",
+                        "month": "6",
+                        "day": "2"
+                    }
+                },
             ],
             "adults": 1,
             "childrenAges": [],
@@ -288,18 +319,12 @@ function start1() {
         }
     };
 
+    getFlightResult(param);
+}
+
+function getFlightResult(param){
     var proxy = 'https://cors-anywhere.herokuapp.com/';
     let url = 'https://partners.api.skyscanner.net/apiservices/v3/flights/live/search/create';
-    // $.ajax({
-    //     url: "https://partners.api.skyscanner.net/apiservices/v3/flights/live/search/create",
-    //     data: JSON.stringify(param),
-    //     type: "POST",
-    //     beforeSend: function (xhr) { 
-    //         xhr.setRequestHeader('content-type', 'application/json'); 
-    //         xhr.setRequestHeader('x-api-key', 'fl687154418168043982723635787130'); 
-    //     },
-    //     success: function (data) { alert('Success!' + data); }
-    // });
 
     $.ajax({
         type: 'POST',
@@ -340,17 +365,29 @@ function getCheapestValue(data) {
     });
 
     console.log(prices);
+    $('#priceAlertDiv').html('');
+    let fitCount = 0;
     prices.forEach(row => {
         let amount = Math.ceil(row.data[0].price.amount / 1000);
         if(amount < PRICE_ALERT){
-            console.log(row);
-            let html = '<div class="alert alert-success" role="alert"><span>'+amount+'EUR. There are '+row.data.length+' deals. </span>';
+            fitCount++;
+            // console.log(row);
+            let html = '';
+            if(row.data.length == 1){
+                html = '<div class="alert alert-success" role="alert"><span>'+amount+'GBP. There is '+row.data.length+' deal. </span>';
+            } else {
+                html = '<div class="alert alert-success" role="alert"><span>'+amount+'GBP. There are '+row.data.length+' deals. </span>';
+            }
+
             row.data.forEach(temp => {
                 html += '<a href="'+temp.items[0].deepLink+'"> Detail ... </a>';
             });
 
             html += '</div>';
-            $('.priceAlertDiv').append(html);
+            $('#priceAlertDiv').append(html);
         }
     });
+
+    $('#res_cnt').text(prices.length);
+    $('#fit_cnt').text(fitCount);
 }
