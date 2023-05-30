@@ -321,7 +321,7 @@ function start1() {
             xhr.setRequestHeader('x-api-key', 'fl687154418168043982723635787130');
         }
     }).done(function (data) {
-        console.log(data);
+        // console.log(data);
 
         url = `https://partners.api.skyscanner.net/apiservices/v3/flights/live/search/poll/${data.sessionToken}`;
         $.ajax({
@@ -338,7 +338,7 @@ function start1() {
                 xhr.setRequestHeader('x-api-key', 'fl687154418168043982723635787130');
             }
         }).done(function (data) {
-            console.log('==========');
+            // console.log('==========');
             console.log(data);
             getCheapestValue(data);
         });
@@ -359,22 +359,43 @@ function getCheapestValue(data) {
 
     // console.log(bestItineraries);
 
-    // let prices = [];
-    // for (const [key, value] of Object.entries(bestItineraries)) {
-    //     // console.log(`${key}: ${value}`);
+    let prices = [];
+    data.content.sortingOptions.cheapest.forEach(item => {
+        let itineraryId = item.itineraryId;
+        let row = {};
+        row.itineraryId = itineraryId;
+        // let amount = data.content.results.itineraries[itineraryId].pricingOptions[0].price.amount;
+        // row.amount = Math.ceil(amount / 1000);
+        // row.link1 = data.content.results.itineraries[itineraryId].pricingOptions[0].items[0].deepLink;
+        // row.link1 = data.content.results.itineraries[itineraryId].pricingOptions[0].items[1].deepLink;
+        row.data = data.content.results.itineraries[itineraryId].pricingOptions;
+        prices.push(row);
+    });
+
+    // for (const [key, value] of Object.entries(data.content.sortingOptions.cheapest)) {
+    //     console.log(`${key}: ${value}`);
     //     let row = {};
     //     row.key = key;
     //     row.value = 0;
+
     //     value.pricingOptions.forEach(element => {
     //         row.value += parseInt(element.price.amount);
     //     });
     //     prices.push(row);
     // }
 
-    // console.log(prices);
+    console.log(prices);
 
-    let itineraryId = data.content.sortingOptions.cheapest[0].itineraryId;
-    let price = data.content.results.itineraries[itineraryId];
-    console.log(price);
+    // let itineraryId = data.content.sortingOptions.cheapest[0].itineraryId;
+    // let price = data.content.results.itineraries[itineraryId];
+    // console.log(price);
+
+    // itineraryId = data.content.sortingOptions.cheapest[1].itineraryId;
+    // price = data.content.results.itineraries[itineraryId];
+    // console.log(price);
+
+    // itineraryId = data.content.sortingOptions.cheapest[2].itineraryId;
+    // price = data.content.results.itineraries[itineraryId];
+    // console.log(price);
 
 }
