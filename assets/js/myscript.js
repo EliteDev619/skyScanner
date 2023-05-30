@@ -4,6 +4,7 @@ $(document).ready(function () {
 
 var IATA_PAIR = [];
 var CSV_DATA = [];
+var PRICE_ALERT = 280;
 
 function changeDate(parent) {
     let form = $('.' + parent);
@@ -153,28 +154,20 @@ function combineIATAPairs() {
 function getQueryLegs(dates, data) {
 
     let legs = [];
-    let leg = {
-        "originPlaceId": {
-            "iata": ""
-        },
-        "destinationPlaceId": {
-            "iata": ""
-        },
-        "date": {
-            "year": '',
-            "month": '',
-            "day": ''
-        }
-    }
-
+    
     for (let i = 0; i < 3; i++) {
         let item = data[i];
         let date = dates[i];
-        leg.originPlaceId['iata'] = item.from;
-        leg.destinationPlaceId['iata'] = item.to;
-        leg.date['year'] = date.split('-')[0];
-        leg.date['month'] = date.split('-')[1];
-        leg.date['day'] = date.split('-')[2];
+        let leg = {};
+        leg.originPlaceId = {};
+        leg.destinationPlaceId = {};
+        leg.date = {};
+
+        leg.originPlaceId.iata = item.from;
+        leg.destinationPlaceId.iata = item.to;
+        leg.date.year = date.split('-')[0];
+        leg.date.month = (parseInt(date.split('-')[1])).toString();
+        leg.date.day = (parseInt(date.split('-')[2])).toString();
         legs.push(leg);
     }
 
@@ -200,8 +193,8 @@ function start() {
     combineIATAPairs();
     // console.log(IATA_PAIR);
     // return;
-    let priceAlert = $('#priceAlert').val();
-    if (!priceAlert) {
+    PRICE_ALERT = $('#priceAlert').val();
+    if (!PRICE_ALERT) {
         alert("Please set price alert!");
         return;
     }
@@ -224,12 +217,13 @@ function start() {
         return;
     }
 
-    if ($('#child').val() == '') {
-        alert('Please set child ages. Split comma');
-        return;
-    }
+    // if ($('#child').val() == '') {
+    //     alert('Please set child ages. Split comma');
+    //     return;
+    // }
 
-    query.childrenAges = $('#child').val().split(',');
+    query.childrenAges = [];
+    // query.childrenAges = $('#child').val().split(',');
 
     query.cabinClass = $('#cabinClass').val();
     if (query.cabinClass == 0) {
@@ -242,6 +236,7 @@ function start() {
     query.includedAgentsIds = [];
     query.includedCarriersIds = [];
     query.nearbyAirports = false;
+    query.includeSustainabilityData = false;
 
     param.query = query;
     console.log(param);
@@ -311,11 +306,6 @@ function start1() {
         // url: url,
         url: proxy + url,
         data: JSON.stringify(param),
-        // headers: {
-        //     "My-First-Header":"first value",
-        //     "My-Second-Header":"second value"
-        // }
-        //OR
         beforeSend: function (xhr) {
             xhr.setRequestHeader('content-type', 'application/json');
             xhr.setRequestHeader('x-api-key', 'fl687154418168043982723635787130');
@@ -328,17 +318,11 @@ function start1() {
             type: 'POST',
             // url: url,
             url: proxy + url,
-            // headers: {
-            //     "My-First-Header":"first value",
-            //     "My-Second-Header":"second value"
-            // }
-            //OR
             beforeSend: function (xhr) {
                 xhr.setRequestHeader('content-type', 'application/json');
                 xhr.setRequestHeader('x-api-key', 'fl687154418168043982723635787130');
             }
         }).done(function (data) {
-            // console.log('==========');
             console.log(data);
             getCheapestValue(data);
         });
@@ -346,56 +330,27 @@ function start1() {
 }
 
 function getCheapestValue(data) {
-    // const bestItineraryIds = data.content.sortingOptions.cheapest.map(
-    //     (flight) => flight.itineraryId,
-    // );
-
-    // const bestItineraries = Object.keys(data.content.results.itineraries)
-    //     .filter((key) => bestItineraryIds.includes(key))
-    //     .reduce((obj, key) => {
-    //         obj[key] = data.content.results.itineraries[key];
-    //         return obj;
-    //     }, {});
-
-    // console.log(bestItineraries);
-
     let prices = [];
     data.content.sortingOptions.cheapest.forEach(item => {
         let itineraryId = item.itineraryId;
         let row = {};
         row.itineraryId = itineraryId;
-        // let amount = data.content.results.itineraries[itineraryId].pricingOptions[0].price.amount;
-        // row.amount = Math.ceil(amount / 1000);
-        // row.link1 = data.content.results.itineraries[itineraryId].pricingOptions[0].items[0].deepLink;
-        // row.link1 = data.content.results.itineraries[itineraryId].pricingOptions[0].items[1].deepLink;
         row.data = data.content.results.itineraries[itineraryId].pricingOptions;
         prices.push(row);
     });
 
-    // for (const [key, value] of Object.entries(data.content.sortingOptions.cheapest)) {
-    //     console.log(`${key}: ${value}`);
-    //     let row = {};
-    //     row.key = key;
-    //     row.value = 0;
-
-    //     value.pricingOptions.forEach(element => {
-    //         row.value += parseInt(element.price.amount);
-    //     });
-    //     prices.push(row);
-    // }
-
     console.log(prices);
+    prices.forEach(row => {
+        let amount = Math.ceil(row.data[0].price.amount / 1000);
+        if(amount < PRICE_ALERT){
+            console.log(row);
+            let html = '<div class="alert alert-success" role="alert"><span>'+amount+'EUR. There are '+row.data.length+' deals. </span>';
+            row.data.forEach(temp => {
+                html += '<a href="'+temp.items[0].deepLink+'"> Detail ... </a>';
+            });
 
-    // let itineraryId = data.content.sortingOptions.cheapest[0].itineraryId;
-    // let price = data.content.results.itineraries[itineraryId];
-    // console.log(price);
-
-    // itineraryId = data.content.sortingOptions.cheapest[1].itineraryId;
-    // price = data.content.results.itineraries[itineraryId];
-    // console.log(price);
-
-    // itineraryId = data.content.sortingOptions.cheapest[2].itineraryId;
-    // price = data.content.results.itineraries[itineraryId];
-    // console.log(price);
-
+            html += '</div>';
+            $('.priceAlertDiv').append(html);
+        }
+    });
 }
