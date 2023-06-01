@@ -5,6 +5,11 @@ $(document).ready(function () {
 var IATA_PAIR = [];
 var CSV_DATA = [];
 var PRICE_ALERT = 600;
+var IATA_REVERSE = {
+    flight1: false,
+    flight2: false,
+    flight3: false,
+};
 
 function changeDate(parent) {
     let form = $('.' + parent);
@@ -71,11 +76,9 @@ function changeRandomDate(parent) {
 
 function changeIATAReverse(parent) {
     let form = $('.' + parent);
-    let fromIATA = $('input[name=from_iata]', form).val();
-    let toIATA = $('input[name=to_iata]', form).val();
+    let checked = $('input[name=search_pair]', form).prop('checked');
 
-    $('input[name=from_iata]', form).val(toIATA);
-    $('input[name=to_iata]', form).val(fromIATA);
+    IATA_REVERSE[parent] = checked;
 }
 
 function importIATA(parent, el) {
@@ -153,6 +156,18 @@ function combineIATAPairs() {
     IATA_PAIR = results;
 }
 
+function setIATAReverse() {
+    for (let i = 1; i < 4; i++) {
+        let b_Reverse = IATA_REVERSE['flight'+i];
+        if(b_Reverse){
+            let data = CSV_DATA['flight'+i];
+            data.forEach(item => {
+                CSV_DATA['flight'+i].push({from: item.to, to: item.from});
+            });
+        }
+    }
+}
+
 function getQueryLegs(dates, data) {
 
     let legs = [];
@@ -178,20 +193,24 @@ function getQueryLegs(dates, data) {
 
 function start() {
 
-    let flight1Date = $('input[name=flight_date]', '.flight1').val();
-    let flight2Date = $('input[name=flight_date]', '.flight2').val();
-    let flight3Date = $('input[name=flight_date]', '.flight3').val();
+    // console.log(IATA_REVERSE);
+    // return;
+    // let flight1Date = $('input[name=flight_date]', '.flight1').val();
+    // let flight2Date = $('input[name=flight_date]', '.flight2').val();
+    // let flight3Date = $('input[name=flight_date]', '.flight3').val();
 
-    if (!flight1Date || !flight2Date || !flight3Date) {
-        alert("Please set flight date.");
-        return;
-    }
+    // if (!flight1Date || !flight2Date || !flight3Date) {
+    //     alert("Please set flight date.");
+    //     return;
+    // }
 
     if (!CSV_DATA.flight1 || !CSV_DATA.flight1.length || !CSV_DATA.flight2 || !CSV_DATA.flight2.length) {
         alert("Please import IATA Data.");
         return;
     }
 
+    setIATAReverse();
+    console.log(CSV_DATA);return;
     combineIATAPairs();
     // console.log(IATA_PAIR);
     // return;
@@ -263,6 +282,7 @@ function start() {
     // param.query = query;
     // getFlightResult(param);
 
+    $('.alerts').html('');
     apiCalls(dates, query);
     // IATA_PAIR.forEach(item => {
     //     query.queryLegs = {};
@@ -345,7 +365,7 @@ async function apiCalls(dates, query) {
 
     (async () => {
         // number of concurrent requests in one batch
-        const batchSize = 2;
+        const batchSize = 1;
         // request counter
         let curReq = 0;
         // as long as there are items in the list continue to form batches
@@ -375,7 +395,7 @@ async function apiCalls(dates, query) {
             if (curReq + 1 < IATA_PAIR.length) {
                 // after requests have returned wait for one second
                 console.log(`[${new Date().toISOString()}] Waiting a second before sending next requests...`)
-                await waitForMs(3000);
+                await waitForMs(2000);
                 console.log(`[${new Date().toISOString()}] At least one second has gone.`)
             }
 
@@ -425,7 +445,7 @@ function getCheapestValue(data, strPair) {
 
     console.log(prices);
     $('.alerts').append('<hr>');
-    $('#priceAlertDiv').html('');
+    // $('#priceAlertDiv').html('');
     let html = '<div id="priceAlertDiv">';
 
     let fitCount = 0;
