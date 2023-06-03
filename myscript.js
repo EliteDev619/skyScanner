@@ -500,12 +500,12 @@ async function apiCalls(dates, query) {
 }
 
 function poll(cookie, strPair, strDate){
-    var proxy = 'https://cors-anywhere.herokuapp.com/';
+    // var proxy = 'https://cors-anywhere.herokuapp.com/';
     let url = `https://partners.api.skyscanner.net/apiservices/v3/flights/live/search/poll/${cookie}`;
     $.ajax({
         type: 'POST',
-        // url: url,
-        url: proxy + url,
+        url: url,
+        // url: proxy + url,
         beforeSend: function (xhr) {
             xhr.setRequestHeader('content-type', 'application/json');
             xhr.setRequestHeader('x-api-key', 'fl687154418168043982723635787130');
@@ -527,8 +527,8 @@ function getFlightResult(param, strPair, strDate) {
 
     $.ajax({
         type: 'POST',
-        // url: url,
-        url: proxy + url,
+        url: url,
+        // url: proxy + url,
         data: JSON.stringify(param),
         beforeSend: function (xhr) {
             xhr.setRequestHeader('content-type', 'application/json');
