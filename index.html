@@ -5,12 +5,11 @@
     <meta charset="UTF-8">
     <title>SkyScanner Tool</title>
 
-    <link href="./css/bootstrap.min.css" rel="stylesheet">
-    <link href="./css/bootstrap.min.css.map" rel="stylesheet">
-    <link href="./css/styles.css" rel="stylesheet">
+    <link href="./bootstrap.min.css" rel="stylesheet">
+    <link href="./styles.css" rel="stylesheet">
 
-    <script src="./js/jquery.min.js"></script>
-    <script src="./js/myscript.js"></script>
+    <script src="./jquery.min.js"></script>
+    <script src="./myscript.js"></script>
 </head>
 
 <body>
@@ -24,17 +23,18 @@
                     <div class="col-12">
                         <input class="form-control" type="date" name="flight_date" onchange="changeDate('flight1')" />
                     </div>
-                    <div class="col-12">
+                    <!-- <div class="col-12">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" onclick="changeDateIncrement('flight1')" id="data_increment1" name="data_increment">
                             <label class="form-check-label" for="data_increment1">
                                 Date incremented
                             </label>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col-12">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" onclick="changeRandomDate('flight1')" id="date_random1" name="date_random">
+                            <input class="form-check-input" type="checkbox" onclick="changeRandomDate('flight1')"
+                                id="date_random1" name="date_random">
                             <label class="form-check-label" for="date_random1">
                                 Random Date
                             </label>
@@ -48,27 +48,31 @@
                     </div>
                     <div class="col-12">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="search_pair1" onclick="changeIATAReverse('flight1')" name="search_pair">
+                            <input class="form-check-input" type="checkbox" id="search_pair1"
+                                onclick="changeIATAReverse('flight1')" name="search_pair">
                             <label class="form-check-label" for="search_pair1">
                                 Search Pair in both directions
                             </label>
                         </div>
                     </div>
-                    <div class="col-12 mtb5">
-                        <label for="import_iata">Import an IATA list pair</label>
-                        <input class="btn btn-success w-100 form-control" type="file" accept=".csv, text/csv"  onchange="importIATA('flight1', this)" id="import_iata" name="import_iata"/>
-                        <!-- <div class="row">
-                            <div class="col-sm-6">
-                                <input type="file" />
-                            </div>
-                            <div class="col-sm-6">
-                                <input class="btn btn-success w-100 form-control" onclick="importIATA('flight1')" value="Import an IATA list pair" />
-                            </div>
-                        </div> -->
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" onclick="changeRandomPair('flight1')"
+                                id="iata_random1" name="iata_random">
+                            <label class="form-check-label" for="iata_random1">
+                                Random IATA Pair
+                            </label>
+                        </div>
                     </div>
                     <div class="col-12 mtb5">
-                        <label for="import_iata">Import a list of dates</label>
-                        <input type="button" class="btn btn-success w-100" onclick="importIATA('flight1')" value="Import a list of dates" />
+                        <label for="import_iata1">Import an IATA list pair</label>
+                        <input class="btn btn-success w-100 form-control" type="file" accept=".csv, text/csv"
+                            onchange="importIATA('flight1', this)" id="import_iata1" />
+                    </div>
+                    <div class="col-12 mtb5">
+                        <label for="import_date1">Import a list of dates</label>
+                        <input class="btn btn-success w-100 form-control" type="file" accept=".csv, text/csv"
+                            onchange="importDates('flight1', this)" id="import_date1" />
                     </div>
                 </form>
             </div>
@@ -82,15 +86,8 @@
                     </div>
                     <div class="col-12">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" onclick="changeDateIncrement('flight2')" id="data_increment2" name="data_increment">
-                            <label class="form-check-label" for="data_increment2">
-                                Date incremented
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" onclick="changeRandomDate('flight2')" id="date_random2" name="date_random">
+                            <input class="form-check-input" type="checkbox" onclick="changeRandomDate('flight2')"
+                                id="date_random2" name="date_random">
                             <label class="form-check-label" for="date_random2">
                                 Random Date
                             </label>
@@ -104,27 +101,31 @@
                     </div>
                     <div class="col-12">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="search_pair2" onclick="changeIATAReverse('flight2')" name="search_pair">
+                            <input class="form-check-input" type="checkbox" id="search_pair2"
+                                onclick="changeIATAReverse('flight2')" name="search_pair">
                             <label class="form-check-label" for="search_pair2">
                                 Search Pair in both directions
                             </label>
                         </div>
                     </div>
-                    <div class="col-12 mtb5">
-                        <label for="import_iata">Import an IATA list pair</label>
-                        <input class="btn btn-success w-100 form-control" type="file" accept=".csv, text/csv"  onchange="importIATA('flight2', this)" id="import_iata" name="import_iata"/>
-                        <!-- <div class="row">
-                            <div class="col-sm-6">
-                                <input type="file" />
-                            </div>
-                            <div class="col-sm-6">
-                                <input class="btn btn-success w-100 form-control" onclick="importIATA('flight2')" value="Import an IATA list pair" />
-                            </div>
-                        </div> -->
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" onclick="changeRandomPair('flight2')"
+                                id="iata_random2" name="iata_random">
+                            <label class="form-check-label" for="iata_random2">
+                                Random IATA Pair
+                            </label>
+                        </div>
                     </div>
                     <div class="col-12 mtb5">
-                        <label for="import_iata">Import a list of dates</label>
-                        <input type="button" class="btn btn-success w-100" onclick="importIATA('flight2')" value="Import a list of dates" />
+                        <label for="import_iata2">Import an IATA list pair</label>
+                        <input class="btn btn-success w-100 form-control" type="file" accept=".csv, text/csv"
+                            onchange="importIATA('flight2', this)" id="import_iata2" />
+                    </div>
+                    <div class="col-12 mtb5">
+                        <label for="import_date2">Import a list of dates</label>
+                        <input class="btn btn-success w-100 form-control" type="file" accept=".csv, text/csv"
+                            onchange="importDates('flight2', this)" id="import_date2" />
                     </div>
                 </form>
             </div>
@@ -138,15 +139,8 @@
                     </div>
                     <div class="col-12">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" onclick="changeDateIncrement('flight3')" id="data_increment3" name="data_increment">
-                            <label class="form-check-label" for="data_increment3">
-                                Date incremented
-                            </label>
-                        </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" onclick="changeRandomDate('flight3')" id="date_random3" name="date_random">
+                            <input class="form-check-input" type="checkbox" onclick="changeRandomDate('flight3')"
+                                id="date_random3" name="date_random">
                             <label class="form-check-label" for="date_random3">
                                 Random Date
                             </label>
@@ -160,27 +154,31 @@
                     </div>
                     <div class="col-12">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="search_pair3" onclick="changeIATAReverse('flight3')" name="search_pair">
+                            <input class="form-check-input" type="checkbox" id="search_pair3"
+                                onclick="changeIATAReverse('flight3')" name="search_pair">
                             <label class="form-check-label" for="search_pair3">
                                 Search Pair in both directions
                             </label>
                         </div>
                     </div>
-                    <div class="col-12 mtb5">
-                        <label for="import_iata">Import an IATA list pair</label>
-                        <input class="btn btn-success w-100 form-control" type="file" accept=".csv, text/csv"  onchange="importIATA('flight3', this)" id="import_iata" name="import_iata"/>
-                        <!-- <div class="row">
-                            <div class="col-sm-6">
-                                <input type="file" />
-                            </div>
-                            <div class="col-sm-6">
-                                <input class="btn btn-success w-100 form-control" onclick="importIATA('flight3')" value="Import an IATA list pair" />
-                            </div>
-                        </div> -->
+                    <div class="col-12">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" onclick="changeRandomPair('flight3')"
+                                id="iata_random3" name="iata_random">
+                            <label class="form-check-label" for="iata_random3">
+                                Random IATA Pair
+                            </label>
+                        </div>
                     </div>
                     <div class="col-12 mtb5">
-                        <label for="import_iata">Import a list of dates</label>
-                        <input type="button" class="btn btn-success w-100" onclick="importIATA('flight3')" value="Import a list of dates" />
+                        <label for="import_iata3">Import an IATA list pair</label>
+                        <input class="btn btn-success w-100 form-control" type="file" accept=".csv, text/csv"
+                            onchange="importIATA('flight3', this)" id="import_iata3" />
+                    </div>
+                    <div class="col-12 mtb5">
+                        <label for="import_date3">Import a list of dates</label>
+                        <input class="btn btn-success w-100 form-control" type="file" accept=".csv, text/csv"
+                            onchange="importDates('flight3', this)" id="import_date3" />
                     </div>
                 </form>
             </div>
@@ -198,6 +196,9 @@
                     <option value="3">Restart after X minutes</option>
                 </select>
             </div>
+            <di class="col">
+                <input class="form-control" type="number" id="restart_min" placeholder="Minute" />
+            </di>
             <div class="col">
                 <select class="form-control" id="cabinClass">
                     <option value="0">Cabin Class</option>
@@ -216,14 +217,24 @@
         </div>
         <div class="row">
             <div class="col">
-                <button class="btn btn-primary" onclick="start()">Start</button>
+                <button class="btn btn-primary" id="startBtn" onclick="start()">Start</button>
             </div>
         </div>
+        <!-- <div class="mt-4 alerts">
+            
+        </div> -->
         <div class="mt-4 alerts">
-            <!-- <div class="col m-2">All result count is <span id="res_cnt"></span>. Fit result count is <span id="fit_cnt"></span></div> -->
-            <!-- <div id="priceAlertDiv"></div> -->
+            <!-- <hr>
+            <div class="col m-2">Pair : [{"from":"FRA","to":"CDG"}, {"from":"LHR","to":"CDG"},
+                {"from":"MLA","to":"CDG"}]. <br> Date : ["2023-06-09", "2023-06-17", "2023-06-22"] All result count is
+                <span>798</span>. Fit result count is <span>0</span>
+                <span class="ml-2 text-primary" style="cursor: pointer" onclick="showResult(this)">Show</span>
+            </div>
+            <div id="priceAlertDiv" style="display: none">
+                <div class="alert alert-success" role="alert"><span> 100GBP. There is 102 deal. </span>
+                </div>
+            </div> -->
         </div>
-    </div>
 
 </body>
 

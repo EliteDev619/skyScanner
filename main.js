@@ -6,12 +6,11 @@ const createWindow = () => {
     width: 1000,
     height: 660,
     webPreferences: {
-      // nodeIntegration: true,
-      preload: path.join(__dirname, '/assets/js/preload.js'),
+      preload: path.join(__dirname, './preload.js'),
     }
   })
 
-  mainWindow.loadFile(__dirname + '/assets/index.html') 
+  mainWindow.loadFile(__dirname + './index.html')
 
   mainWindow.webContents.openDevTools()
 }
